@@ -109,7 +109,7 @@ function openRegistrationModal(opts) {
           </form>
           <div class="step-pane step-pane-2" style="display:none;">
             <div class="qr-box">
-              <canvas id="qr-canvas" width="240" height="240" style="background:#fff; border-radius:8px;"></canvas>
+              <img id="upi-img" alt="UPI QR" width="240" height="240" style="background:#fff; border-radius:8px; object-fit: contain;" />
               <div class="note">Scan the QR with your UPI app to pay. After payment, show confirmation to the desk at the venue.</div>
               <div class="actions">
                 <a class="btn" id="upi-intent" target="_blank" rel="noopener">Open UPI App</a>
@@ -137,8 +137,9 @@ function openRegistrationModal(opts) {
       const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent('CoSmoG')}&am=${encodeURIComponent(amt)}&cu=INR&tn=${encodeURIComponent(note)}`;
       const intent = backdrop.querySelector('#upi-intent');
       intent.href = upiUrl;
-      // Draw QR
-      drawQrToCanvas(backdrop.querySelector('#qr-canvas'), upiUrl);
+      // Set static UPI QR image
+      const upiImg = backdrop.querySelector('#upi-img');
+      if (upiImg) upiImg.src = 'assets/img/GooglePay_QR.png';
       // Switch step
       backdrop.querySelector('.step-1').classList.remove('active');
       backdrop.querySelector('.step-2').classList.add('active');
@@ -156,20 +157,5 @@ function closeRegistrationModal() {
 }
 
 // Minimal QR generator (naive): uses external API fallback if canvas not supported
-function drawQrToCanvas(canvas, text) {
-  try {
-    // Use simple fallback: draw an image fetched from a QR API (no server)
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function () {
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    };
-    const url = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(text)}`;
-    img.src = url;
-  } catch (e) {
-    // No-op; show intent link as fallback
-  }
-}
+// (Dynamic QR generation removed in favor of static image)
 
