@@ -15,16 +15,16 @@
 
 /* Light mode */
 .light {
-  --bg: #fffbe6;     /* light warm background */
+  --bg: #f5f5f5;     /* softer light background */
   --panel: #ffffff;
-  --text: #111111;
-  --muted: #616161;
-  --brand: #ca8a04;   /* yellow-700 */
-  --brand-2: #d97706; /* orange-600 */
-  --accent: #a16207;
-  --danger: #b91c1c;
-  --border: #f1e9b8;
-  --shadow: 0 10px 30px rgba(2,6,23,.08);
+  --text: #1a1a1a;
+  --muted: #666666;
+  --brand: #b8860b;   /* darker yellow */
+  --brand-2: #daa520; /* goldenrod */
+  --accent: #8b6914;
+  --danger: #dc2626;
+  --border: #e0e0e0;
+  --shadow: 0 10px 30px rgba(0,0,0,.1);
 }
 
 * { box-sizing: border-box; }
@@ -60,7 +60,7 @@ img { max-width: 100%; display: block; }
 .menu-btn { display: none; }
 
 /* Mobile menu */
-@media (max-width: 780px) {
+@media (max-width: 768px) {
   .menu-btn { display: inline-flex; align-items: center; gap: 6px; }
   .nav-links { display: none; position: absolute; left: 0; right: 0; top: 64px; background: var(--panel); border-bottom: 1px solid var(--border); flex-direction: column; padding: 10px 20px; }
   .nav-links.open { display: flex; }

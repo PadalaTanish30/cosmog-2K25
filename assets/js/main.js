@@ -181,3 +181,45 @@ function closeRegistrationModal() {
 // Minimal QR generator (naive): uses external API fallback if canvas not supported
 // (Dynamic QR generation removed in favor of static image)
 
+// Web Share for event cards
+document.addEventListener('click', function (e) {
+  const t = e.target;
+  if (t && (t.matches('[data-share]') || t.closest('[data-share]'))) {
+    const card = t.closest('.card');
+    const title = card ? card.querySelector('h3')?.textContent?.trim() : document.title;
+    const text = `Join me at ${title} - CoSmoG`;
+    const url = window.location.origin + window.location.pathname;
+    if (navigator.share) {
+      navigator.share({ title, text, url }).catch(() => {});
+    } else {
+      navigator.clipboard?.writeText(url);
+      alert('Link copied to clipboard');
+    }
+  }
+});
+
+// Announcement bar dismiss
+(function () {
+  const bar = document.getElementById('announce');
+  if (!bar) return;
+  if (localStorage.getItem('announce:dismissed') === '1') {
+    bar.style.display = 'none';
+    return;
+  }
+  bar.addEventListener('click', function (e) {
+    if (e.target && e.target.matches('[data-dismiss]')) {
+      e.preventDefault();
+      e.stopPropagation();
+      localStorage.setItem('announce:dismissed', '1');
+      bar.style.display = 'none';
+    }
+  });
+})();
+
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
