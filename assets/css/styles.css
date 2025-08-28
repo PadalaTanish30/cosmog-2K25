@@ -129,6 +129,27 @@ label { font-size: 14px; color: var(--muted); }
   50% { opacity: 1; transform: scale(1.2); }
 }
 
+/* Additional animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+.hero { animation: fadeInUp 1s ease-out; }
+.cta { animation: pulse 2s infinite; }
+.card { animation: fadeInUp 0.8s ease-out; }
+.countdown .timebox { animation: float 3s ease-in-out infinite; }
+
 .hero::before {
   content: '';
   position: absolute;
@@ -136,8 +157,8 @@ label { font-size: 14px; color: var(--muted); }
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(255, 208, 0, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+  background: radial-gradient(circle at 20% 80%, rgba(110, 231, 255, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
 }
@@ -153,4 +174,6 @@ label { font-size: 14px; color: var(--muted); }
 .modal .step.active { color: var(--text); background: rgba(110,231,255,.12); }
 .modal .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
 .qr-box { display: grid; gap: 10px; justify-items: center; text-align: center; }
+.upload-box { display: grid; gap: 10px; text-align: center; }
+.success-box { display: grid; gap: 10px; text-align: center; padding: 20px; }
 

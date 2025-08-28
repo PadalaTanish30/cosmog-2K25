@@ -85,6 +85,8 @@ function openRegistrationModal(opts) {
           <div class="steps">
             <span class="step step-1 active">1. Details</span>
             <span class="step step-2">2. UPI Payment</span>
+            <span class="step step-3">3. Upload</span>
+            <span class="step step-4">4. Success</span>
           </div>
           <form id="reg-form" class="step-pane step-pane-1">
             <div class="row" style="gap:10px; align-items:stretch;">
@@ -110,10 +112,33 @@ function openRegistrationModal(opts) {
           <div class="step-pane step-pane-2" style="display:none;">
             <div class="qr-box">
               <img id="upi-img" alt="UPI QR" width="240" height="240" style="background:#fff; border-radius:8px; object-fit: contain;" />
-              <div class="note">Scan the QR with your UPI app to pay. After payment, show confirmation to the desk at the venue.</div>
+              <div class="note">Scan the QR with your UPI app to pay. After payment, upload a screenshot of your transaction.</div>
               <div class="actions">
                 <a class="btn" id="upi-intent" target="_blank" rel="noopener">Open UPI App</a>
-                <button class="btn" data-modal-close>Done</button>
+                <button class="btn primary" id="upload-btn">Upload Screenshot</button>
+              </div>
+            </div>
+          </div>
+          <div class="step-pane step-pane-3" style="display:none;">
+            <div class="upload-box">
+              <h4>Upload Payment Screenshot</h4>
+              <input type="file" id="screenshot-upload" accept="image/*" style="margin: 10px 0;" />
+              <div class="note">Please upload a clear screenshot of your UPI payment confirmation.</div>
+              <div class="actions">
+                <button class="btn" id="back-btn">Back</button>
+                <button class="btn primary" id="submit-btn">Submit Registration</button>
+              </div>
+            </div>
+          </div>
+          <div class="step-pane step-pane-4" style="display:none;">
+            <div class="success-box">
+              <div style="font-size: 48px; margin-bottom: 16px;">⭐</div>
+              <h3>Hey STAR! 🌟</h3>
+              <p>Thank you for registering for <strong id="event-name"></strong>!</p>
+              <p>We're excited to see you at CoSmoG. Your registration has been confirmed.</p>
+              <div class="note">Check your email for further details. See you at the event!</div>
+              <div class="actions">
+                <button class="btn primary" data-modal-close>Awesome! 🚀</button>
               </div>
             </div>
           </div>
@@ -146,6 +171,40 @@ function openRegistrationModal(opts) {
       backdrop.querySelector('.step-2').classList.add('active');
       backdrop.querySelector('.step-pane-1').style.display = 'none';
       backdrop.querySelector('.step-pane-2').style.display = 'block';
+    });
+
+    // Upload button
+    const uploadBtn = backdrop.querySelector('#upload-btn');
+    uploadBtn.addEventListener('click', () => {
+      backdrop.querySelector('.step-2').classList.remove('active');
+      backdrop.querySelector('.step-3').classList.add('active');
+      backdrop.querySelector('.step-pane-2').style.display = 'none';
+      backdrop.querySelector('.step-pane-3').style.display = 'block';
+    });
+
+    // Back button
+    const backBtn = backdrop.querySelector('#back-btn');
+    backBtn.addEventListener('click', () => {
+      backdrop.querySelector('.step-3').classList.remove('active');
+      backdrop.querySelector('.step-2').classList.add('active');
+      backdrop.querySelector('.step-pane-3').style.display = 'none';
+      backdrop.querySelector('.step-pane-2').style.display = 'block';
+    });
+
+    // Submit button
+    const submitBtn = backdrop.querySelector('#submit-btn');
+    submitBtn.addEventListener('click', () => {
+      const fileInput = backdrop.querySelector('#screenshot-upload');
+      if (!fileInput.files.length) {
+        alert('Please upload a screenshot first');
+        return;
+      }
+      // Show success
+      backdrop.querySelector('.step-3').classList.remove('active');
+      backdrop.querySelector('.step-4').classList.add('active');
+      backdrop.querySelector('.step-pane-3').style.display = 'none';
+      backdrop.querySelector('.step-pane-4').style.display = 'block';
+      backdrop.querySelector('#event-name').textContent = eventTitle || 'the event';
     });
   }
   backdrop.querySelector('#reg-title').textContent = `${eventTitle || 'Registration'}`;
