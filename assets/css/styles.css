@@ -13,19 +13,7 @@
   --shadow: 0 10px 30px rgba(0,0,0,.55);
 }
 
-/* Light mode */
-.light {
-  --bg: #1a1a1a;     /* dark background instead of white */
-  --panel: #2a2a2a;
-  --text: #f0f0f0;
-  --muted: #b0b0b0;
-  --brand: #ffd000;   /* bright yellow */
-  --brand-2: #f59e0b; /* amber */
-  --accent: #f59e0b;
-  --danger: #ef4444;
-  --border: #404040;
-  --shadow: 0 10px 30px rgba(0,0,0,.3);
-}
+
 
 * { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -56,7 +44,7 @@ img { max-width: 100%; display: block; }
 .nav-links { display: flex; gap: 20px; }
 .nav-links a { padding: 8px 10px; color: var(--muted); }
 .nav-links a.active, .nav-links a:hover { color: var(--text); }
-.theme-toggle { border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 10px; padding: 6px 10px; cursor: pointer; }
+
 .menu-btn { display: none; }
 
 /* Mobile menu */
@@ -128,9 +116,31 @@ label { font-size: 14px; color: var(--muted); }
 .mt-20 { margin-top: 20px; }
 .center { text-align: center; }
 
-/* Visual enhancements */
+/* Space theme elements */
 .panel { position: relative; overflow: hidden; }
-.panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--brand), var(--brand-2)); }
+.star { position: absolute; width: 2px; height: 2px; background: var(--brand); border-radius: 50%; animation: twinkle 3s infinite; }
+.star:nth-child(1) { top: 10%; left: 15%; animation-delay: 0s; }
+.star:nth-child(2) { top: 25%; right: 20%; animation-delay: 1s; }
+.star:nth-child(3) { bottom: 30%; left: 25%; animation-delay: 2s; }
+.star:nth-child(4) { bottom: 15%; right: 10%; animation-delay: 0.5s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(255, 208, 0, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
 
 /* Modal */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; z-index: 100; }

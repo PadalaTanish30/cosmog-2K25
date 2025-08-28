@@ -1,26 +1,7 @@
 // Theme toggle and mobile menu
 (function () {
-  const root = document.documentElement;
-  const storedTheme = localStorage.getItem('theme');
-  if (storedTheme === 'light') {
-    root.classList.add('light');
-  }
-
-  function setTheme(next) {
-    if (next === 'light') {
-      root.classList.add('light');
-    } else {
-      root.classList.remove('light');
-    }
-    localStorage.setItem('theme', next);
-  }
-
   document.addEventListener('click', function (e) {
     const t = e.target;
-    if (t && t.matches('[data-toggle-theme]')) {
-      const next = root.classList.contains('light') ? 'dark' : 'light';
-      setTheme(next);
-    }
     if (t && (t.matches('[data-menu]') || t.closest('[data-menu]'))) {
       e.preventDefault();
       const btn = t.closest('[data-menu]') || t;
