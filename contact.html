@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CoSmoG • Contact & Support</title>
+  <meta name="description" content="Reach the organizing team and browse FAQs.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="icon" href="assets/img/favicon.png">
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"></span>
+        <span>CoSmoG</span>
+      </a>
+      <nav>
+        <div class="row">
+          <button class="btn theme-toggle" data-toggle-theme>Theme</button>
+          <button class="btn menu-btn" data-menu>Menu</button>
+        </div>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="events.html">Events</a>
+          <a class="active" href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="badge alt">We're here to help</span>
+        <h1>Contact & Support</h1>
+        <p>Questions about events, registration, or logistics? Send us a message.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="grid grid-2">
+          <div class="panel card">
+            <h3 class="mt-0">Send a message</h3>
+            <form name="contact" method="POST" data-netlify="true">
+              <input type="hidden" name="form-name" value="contact">
+              <div>
+                <label for="name">Name</label>
+                <input id="name" name="name" required placeholder="Your full name">
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required placeholder="you@example.com">
+              </div>
+              <div>
+                <label for="topic">Topic</label>
+                <select id="topic" name="topic">
+                  <option>General</option>
+                  <option>Registration</option>
+                  <option>Workshop</option>
+                  <option>Competition</option>
+                </select>
+              </div>
+              <div>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required placeholder="How can we help?"></textarea>
+              </div>
+              <div class="btn-row">
+                <button class="btn primary" type="submit">Send</button>
+                <button class="btn" type="reset">Clear</button>
+              </div>
+              <div class="note">We typically reply within 48 hours.</div>
+            </form>
+          </div>
+          <div class="panel card faq">
+            <h3 class="mt-0">Frequently Asked</h3>
+            <div class="qa">
+              <div class="q">Who can participate?</div>
+              <div class="a note">All SMEC students; some events may allow external participants if announced.</div>
+            </div>
+            <div class="qa">
+              <div class="q">Is there any registration fee?</div>
+              <div class="a note">No fee for entry; select workshops may require prior reservation due to limited seats.</div>
+            </div>
+            <div class="qa">
+              <div class="q">Do I need a team?</div>
+              <div class="a note">Some events are solo; others allow teams. Check the event details.</div>
+            </div>
+            <div class="qa">
+              <div class="q">Will certificates be provided?</div>
+              <div class="a note">Participation certificates for workshops; winners’ certificates for competitions.</div>
+            </div>
+            <div class="qa">
+              <div class="q">What should I bring?</div>
+              <div class="a note">College ID, and laptop/charger if you’re in a workshop or coding event.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>© 2025 CoSmoG • Contact</div>
+      <div class="footer-links">
+        <a href="mailto:padalatanish30@gmail.com">Email</a>
+        <a href="https://maps.app.goo.gl/w22h3UCYZTrzeAp88" target="_blank" rel="noopener">Venue</a>
+        <a href="https://www.instagram.com/cosmog_2k25/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://discord.gg/avT2Zha4xR" target="_blank" rel="noopener">Discord</a>
+        <a href="code-of-conduct.html">Code of Conduct</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
+

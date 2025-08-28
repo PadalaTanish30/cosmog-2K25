@@ -1,0 +1,72 @@
+{
+  "branding": {
+    "eventName": "CoSmoG",
+    "branch": "CSG",
+    "college": "St. Martin's Engineering College",
+    "tagline": "UNLEASH THE STAR IN YOU",
+    "contactEmail": "padalatanish30@gmail.com",
+    "logo": "assets/img/IMG_20250828_201443.jpg",
+    "ogImage": "assets/img/IMG-20250821-WA0020.jpg"
+  },
+  "event": {
+    "start": "2025-09-15T09:00:00+05:30",
+    "end": "2025-09-16T18:00:00+05:30",
+    "venues": [
+      "Mahatma Gandhi Block - MG Auditorium",
+      "Subash Chandra Bose Block (SCB) - Sardar Vallabhbhai Patel Auditorium",
+      "Avul Pakir Jainulabdeen Abdul Kalam Block - APJ Abdul Kalam Auditorium"
+    ],
+    "mapsUrl": "https://maps.app.goo.gl/w22h3UCYZTrzeAp88"
+  },
+  "homepage": {
+    "heroHeading": "CoSmoG",
+    "heroDescription": "Design tomorrow's information technology products, services and systems which combine emerging technologies with rigorous design methods & practices.",
+    "highlights": [],
+    "cta1": { "label": "Explore Events", "href": "events.html" },
+    "cta2": { "label": "View Schedule", "href": "schedule.html" },
+    "about": "Computer Science and Design (CSD) aims to develop graduates well versed with computing approaches and design. The program combines core CSE with Design and Digital Media electives to prepare students for IT and digital media industries like gaming, animation, VR/AR, and for higher studies in CSE/IT or Design."
+  },
+  "schedule": [
+    { "time": "09:00", "session": "Opening Keynote", "track": "talk", "location": "Auditorium" },
+    { "time": "10:00", "session": "Web Dev Workshop", "track": "workshop", "location": "Lab 1" },
+    { "time": "11:30", "session": "Debugging Sprint", "track": "competition", "location": "Lab 2" }
+  ],
+  "events": [
+    { "title": "Art / Design Art", "type": "competition", "desc": "Showcase creativity in art and design.", "link": "#" },
+    { "title": "Web Design Using Prompt", "type": "workshop", "desc": "Prompt-driven modern web design techniques.", "link": "#" },
+    { "title": "Quiz", "type": "competition", "desc": "General and tech quiz challenges.", "link": "#" },
+    { "title": "Main Event", "type": "other", "desc": "Flagship attraction of CoSmoG.", "link": "#" },
+    { "title": "Esports", "type": "competition", "desc": "Competitive gaming tournament.", "link": "#" },
+    { "title": "Editing Competition", "type": "competition", "desc": "Video/photo editing skills challenge.", "link": "#" },
+    { "title": "Movie Rampage", "type": "other", "desc": "Fun movie-themed activities.", "link": "#" },
+    { "title": "Culturals", "type": "other", "desc": "Cultural performances and showcases.", "link": "#" }
+  ],
+  "contact": {
+    "email": "padalatanish30@gmail.com",
+    "channels": [
+      { "type": "instagram", "url": "https://www.instagram.com/cosmog_2k25/?utm_source=ig_web_button_share_sheet" },
+      { "type": "discord", "url": "https://discord.gg/avT2Zha4xR" }
+    ],
+    "faq": [
+      { "q": "Who can participate?", "a": "All SMEC students; some events may allow external participants if announced." },
+      { "q": "Is there any registration fee?", "a": "No fee for entry; select workshops may require prior reservation due to limited seats." },
+      { "q": "Do I need a team?", "a": "Some events are solo; others allow teams. Check event card details." },
+      { "q": "Will certificates be provided?", "a": "Participation certificates for workshops; winners’ certificates for competitions." },
+      { "q": "What should I bring?", "a": "College ID, and laptop/charger if you’re in a workshop or coding event." },
+      { "q": "How do I get updates?", "a": "Follow Instagram and check the website schedule page for changes." }
+    ]
+  },
+  "social": {
+    "website": "",
+    "instagram": "https://www.instagram.com/cosmog_2k25/?utm_source=ig_web_button_share_sheet",
+    "twitter": "",
+    "linkedin": "",
+    "youtube": ""
+  },
+  "seo": {
+    "title": "CoSmoG",
+    "description": "UNLEASH THE STAR IN YOU at SMEC's CoSmoG.",
+    "ogTitle": "CoSmoG",
+    "ogDescription": "Design tomorrow’s IT with creativity and innovation at CoSmoG."
+  }
+}

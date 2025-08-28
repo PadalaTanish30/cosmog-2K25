@@ -1,0 +1,175 @@
+// Theme toggle and mobile menu
+(function () {
+  const root = document.documentElement;
+  const storedTheme = localStorage.getItem('theme');
+  if (storedTheme === 'light') {
+    root.classList.add('light');
+  }
+
+  function setTheme(next) {
+    if (next === 'light') {
+      root.classList.add('light');
+    } else {
+      root.classList.remove('light');
+    }
+    localStorage.setItem('theme', next);
+  }
+
+  document.addEventListener('click', function (e) {
+    const t = e.target;
+    if (t && t.matches('[data-toggle-theme]')) {
+      const next = root.classList.contains('light') ? 'dark' : 'light';
+      setTheme(next);
+    }
+    if (t && (t.matches('[data-menu]') || t.closest('[data-menu]'))) {
+      const links = document.querySelector('.nav-links');
+      if (links) links.classList.toggle('open');
+    }
+    if (t && t.matches('.faq q, .faq .q')) {
+      const item = t.closest('.qa');
+      if (item) item.classList.toggle('open');
+    }
+    // Open registration modal
+    if (t && (t.matches('[data-register]') || t.closest('[data-register]'))) {
+      const card = t.closest('.card');
+      const title = card ? card.querySelector('h3')?.textContent?.trim() : 'Registration';
+      openRegistrationModal({ eventTitle: title });
+    }
+    if (t && t.matches('[data-modal-close]')) {
+      closeRegistrationModal();
+    }
+  });
+
+  // Countdown if present
+  const countdownEl = document.querySelector('[data-countdown]');
+  if (countdownEl) {
+    const targetIso = countdownEl.getAttribute('data-countdown');
+    const target = targetIso ? new Date(targetIso) : null;
+    const daysEl = document.getElementById('cd-days');
+    const hoursEl = document.getElementById('cd-hours');
+    const minsEl = document.getElementById('cd-mins');
+    const secsEl = document.getElementById('cd-secs');
+    function update() {
+      if (!target) return;
+      const now = new Date();
+      const diff = Math.max(0, target - now);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / (1000 * 60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+      if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+      if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+      if (minsEl) minsEl.textContent = String(mins).padStart(2, '0');
+      if (secsEl) secsEl.textContent = String(secs).padStart(2, '0');
+    }
+    update();
+    setInterval(update, 1000);
+  }
+})();
+
+// Registration modal logic
+function openRegistrationModal(opts) {
+  const { eventTitle } = opts || {};
+  let backdrop = document.getElementById('reg-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'reg-backdrop';
+    backdrop.className = 'modal-backdrop';
+    backdrop.innerHTML = `
+      <div class="modal" role="dialog" aria-modal="true">
+        <header>
+          <div><strong id="reg-title"></strong></div>
+          <button class="btn" data-modal-close>Close</button>
+        </header>
+        <div class="content">
+          <div class="steps">
+            <span class="step step-1 active">1. Details</span>
+            <span class="step step-2">2. UPI Payment</span>
+          </div>
+          <form id="reg-form" class="step-pane step-pane-1">
+            <div class="row" style="gap:10px; align-items:stretch;">
+              <div style="flex:1">
+                <label>Name</label>
+                <input name="name" required placeholder="Your full name" />
+              </div>
+              <div style="flex:1">
+                <label>Roll No</label>
+                <input name="roll" required placeholder="e.g., 22CSD123" />
+              </div>
+            </div>
+            <div class="row" style="gap:10px; align-items:stretch; margin-top:10px;">
+              <div style="flex:1">
+                <label>Branch</label>
+                <input name="branch" required placeholder="e.g., CSD/CSG" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn primary" id="reg-next">Proceed</button>
+            </div>
+          </form>
+          <div class="step-pane step-pane-2" style="display:none;">
+            <div class="qr-box">
+              <canvas id="qr-canvas" width="240" height="240" style="background:#fff; border-radius:8px;"></canvas>
+              <div class="note">Scan the QR with your UPI app to pay. After payment, show confirmation to the desk at the venue.</div>
+              <div class="actions">
+                <a class="btn" id="upi-intent" target="_blank" rel="noopener">Open UPI App</a>
+                <button class="btn" data-modal-close>Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener('click', (ev) => {
+      if (ev.target === backdrop) closeRegistrationModal();
+    });
+    const nextBtn = backdrop.querySelector('#reg-next');
+    nextBtn.addEventListener('click', () => {
+      const form = backdrop.querySelector('#reg-form');
+      if (!form.reportValidity()) return;
+      // Build UPI URL
+      const upiId = (document.querySelector('meta[name="upi-id"]')?.getAttribute('content')) || 'upi-id-not-set@upi';
+      const amt = (document.querySelector('meta[name="upi-amount"]')?.getAttribute('content')) || '0';
+      const name = form.querySelector('input[name="name"]').value.trim();
+      const roll = form.querySelector('input[name="roll"]').value.trim();
+      const branch = form.querySelector('input[name="branch"]').value.trim();
+      const note = `${eventTitle || 'Event'} | ${name} | ${roll} | ${branch}`.slice(0, 80);
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent('CoSmoG')}&am=${encodeURIComponent(amt)}&cu=INR&tn=${encodeURIComponent(note)}`;
+      const intent = backdrop.querySelector('#upi-intent');
+      intent.href = upiUrl;
+      // Draw QR
+      drawQrToCanvas(backdrop.querySelector('#qr-canvas'), upiUrl);
+      // Switch step
+      backdrop.querySelector('.step-1').classList.remove('active');
+      backdrop.querySelector('.step-2').classList.add('active');
+      backdrop.querySelector('.step-pane-1').style.display = 'none';
+      backdrop.querySelector('.step-pane-2').style.display = 'block';
+    });
+  }
+  backdrop.querySelector('#reg-title').textContent = `${eventTitle || 'Registration'}`;
+  backdrop.classList.add('open');
+}
+
+function closeRegistrationModal() {
+  const backdrop = document.getElementById('reg-backdrop');
+  if (backdrop) backdrop.classList.remove('open');
+}
+
+// Minimal QR generator (naive): uses external API fallback if canvas not supported
+function drawQrToCanvas(canvas, text) {
+  try {
+    // Use simple fallback: draw an image fetched from a QR API (no server)
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function () {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    const url = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(text)}`;
+    img.src = url;
+  } catch (e) {
+    // No-op; show intent link as fallback
+  }
+}
+

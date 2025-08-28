@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CoSmoG • Schedule</title>
+  <meta name="description" content="Agenda and session details for CoSmoG at SMEC.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="icon" href="assets/img/favicon.png">
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand">
+        <span class="brand-badge"></span>
+        <span>CoSmoG</span>
+      </a>
+      <nav>
+        <div class="row">
+          <button class="btn theme-toggle" data-toggle-theme>Theme</button>
+          <button class="btn menu-btn" data-menu>Menu</button>
+        </div>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a class="active" href="schedule.html">Schedule</a>
+          <a href="events.html">Events</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="badge alt">Two Days • 15–16 Sep 2025</span>
+        <h1>Event Schedule</h1>
+        <p>Plan your days. Filter by track to see what matters most to you.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="panel card">
+          <div class="row" style="justify-content: space-between;">
+            <div class="row">
+              <label for="track">Track</label>
+              <select id="track" onchange="document.querySelectorAll('[data-track]').forEach(e=>{e.style.display=(this.value==='all'||e.dataset.track===this.value)?'table-row':'none';})">
+                <option value="all">All</option>
+                <option value="workshop">Workshop</option>
+                <option value="talk">Talk</option>
+                <option value="competition">Competition</option>
+              </select>
+            </div>
+            <div class="note">Venues: MG Auditorium • SCB - Sardar Vallabhbhai Patel Auditorium • APJ Abdul Kalam Auditorium</div>
+          </div>
+          <div class="space"></div>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Session</th>
+                <th>Track</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-track="talk"><td>09:00</td><td>Opening Keynote</td><td>Talk</td><td>Auditorium</td></tr>
+              <tr data-track="workshop"><td>10:00</td><td>Web Dev Workshop</td><td>Workshop</td><td>Lab 1</td></tr>
+              <tr data-track="competition"><td>11:30</td><td>Debugging Sprint</td><td>Competition</td><td>Lab 2</td></tr>
+              <tr data-track="talk"><td>14:00</td><td>AI for Everyone</td><td>Talk</td><td>Auditorium</td></tr>
+              <tr data-track="workshop"><td>15:30</td><td>IoT Basics</td><td>Workshop</td><td>Lab 3</td></tr>
+              <tr data-track="competition"><td>17:00</td><td>Hackathon Kickoff</td><td>Competition</td><td>Lab Complex</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>© 2025 CoSmoG • Schedule</div>
+      <div class="footer-links">
+        <a href="contact.html">Support</a>
+        <a href="code-of-conduct.html">Code of Conduct</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
+
