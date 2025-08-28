@@ -22,8 +22,20 @@
       setTheme(next);
     }
     if (t && (t.matches('[data-menu]') || t.closest('[data-menu]'))) {
-      const links = document.querySelector('.nav-links');
-      if (links) links.classList.toggle('open');
+      e.preventDefault();
+      const btn = t.closest('[data-menu]') || t;
+      const header = btn.closest('header');
+      const links = header ? header.querySelector('.nav-links') : document.querySelector('.nav-links');
+      if (links) {
+        links.classList.toggle('open');
+        btn.setAttribute('aria-expanded', links.classList.contains('open') ? 'true' : 'false');
+      }
+    }
+    // Close mobile menu after navigating
+    if (t && t.matches('.nav-links a')) {
+      const header = t.closest('header');
+      const links = header ? header.querySelector('.nav-links') : null;
+      if (links) links.classList.remove('open');
     }
     if (t && t.matches('.faq q, .faq .q')) {
       const item = t.closest('.qa');
