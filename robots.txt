@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://padalatanish30.github.io/cosmog-2K25/sitemap.xml
+

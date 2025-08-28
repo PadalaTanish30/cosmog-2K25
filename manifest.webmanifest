@@ -1,0 +1,13 @@
+{
+  "name": "CoSmoG",
+  "short_name": "CoSmoG",
+  "start_url": "/cosmog-2K25/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ffd000",
+  "icons": [
+    { "src": "assets/img/IMG_20250828_201443.jpg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "assets/img/IMG_20250828_201443.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}
+

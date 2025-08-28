@@ -43,9 +43,11 @@
     }
     // Open registration modal
     if (t && (t.matches('[data-register]') || t.closest('[data-register]'))) {
-      const card = t.closest('.card');
+      const btn = t.closest('[data-register]') || t;
+      const card = btn.closest('.card');
       const title = card ? card.querySelector('h3')?.textContent?.trim() : 'Registration';
-      openRegistrationModal({ eventTitle: title });
+      const amount = btn.getAttribute('data-amount') || '';
+      openRegistrationModal({ eventTitle: title, amount });
     }
     if (t && t.matches('[data-modal-close]')) {
       closeRegistrationModal();
@@ -79,9 +81,14 @@
   }
 })();
 
+// Close modal on ESC
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeRegistrationModal();
+});
+
 // Registration modal logic
 function openRegistrationModal(opts) {
-  const { eventTitle } = opts || {};
+  const { eventTitle, amount } = opts || {};
   let backdrop = document.getElementById('reg-backdrop');
   if (!backdrop) {
     backdrop = document.createElement('div');
@@ -141,7 +148,8 @@ function openRegistrationModal(opts) {
       if (!form.reportValidity()) return;
       // Build UPI URL
       const upiId = (document.querySelector('meta[name="upi-id"]')?.getAttribute('content')) || 'upi-id-not-set@upi';
-      const amt = (document.querySelector('meta[name="upi-amount"]')?.getAttribute('content')) || '0';
+      const metaAmount = (document.querySelector('meta[name="upi-amount"]')?.getAttribute('content')) || '';
+      const amt = amount || metaAmount || '0';
       const name = form.querySelector('input[name="name"]').value.trim();
       const roll = form.querySelector('input[name="roll"]').value.trim();
       const branch = form.querySelector('input[name="branch"]').value.trim();
@@ -161,6 +169,8 @@ function openRegistrationModal(opts) {
   }
   backdrop.querySelector('#reg-title').textContent = `${eventTitle || 'Registration'}`;
   backdrop.classList.add('open');
+  const focusEl = backdrop.querySelector('input, button');
+  if (focusEl) focusEl.focus();
 }
 
 function closeRegistrationModal() {
