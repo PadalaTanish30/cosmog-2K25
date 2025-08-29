@@ -1,0 +1,31 @@
+/**
+ * WebP Fallback CSS
+ * Provides fallback for background images when WebP is not supported
+ */
+
+/* Hero section background */
+.webp-support .hero-section {
+  background-image: url('../img/IMG-20250821-WA0020.webp');
+}
+
+.no-webp-support .hero-section {
+  background-image: url('../img/IMG-20250821-WA0020.jpg');
+}
+
+/* Event card backgrounds */
+.webp-support .event-card.featured {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../img/IMG_20250828_201443.webp');
+}
+
+.no-webp-support .event-card.featured {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../img/IMG_20250828_201443.jpg');
+}
+
+/* QR code image */
+.webp-support .qr-code img {
+  content: url('../img/GooglePay_QR.webp');
+}
+
+.no-webp-support .qr-code img {
+  content: url('../img/GooglePay_QR.png');
+}

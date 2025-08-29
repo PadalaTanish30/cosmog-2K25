@@ -1,0 +1,43 @@
+/**
+ * Image Optimizations CSS
+ * Provides styles for optimized images and WebP support
+ */
+
+/* Base image styling */
+img {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Lazy loaded images */
+img[data-src] {
+  opacity: 0;
+}
+
+img.loaded {
+  opacity: 1;
+}
+
+/* Background image WebP support */
+.webp-support .webp-bg {
+  background-image: var(--webp-bg-img);
+}
+
+.no-webp-support .webp-bg {
+  background-image: var(--fallback-bg-img);
+}
+
+/* Responsive images */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Blur-up technique for image loading */
+.blur-up {
+  filter: blur(5px);
+  transition: filter 0.3s ease-in-out;
+}
+
+.blur-up.loaded {
+  filter: blur(0);
+}

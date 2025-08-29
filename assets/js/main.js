@@ -136,8 +136,10 @@ function openRegistrationModal(opts) {
               <h3>Hey STAR! 🌟</h3>
               <p>Thank you for registering for <strong id="event-name"></strong>!</p>
               <p>We're excited to see you at CoSmoG. Your registration has been confirmed.</p>
+              <div class="content"><!-- Payment details will be inserted here --></div>
               <div class="note">Check your email for further details. See you at the event!</div>
               <div class="actions">
+                <button class="btn" id="download-receipt" style="display:none;">Download Receipt</button>
                 <button class="btn primary" data-modal-close>Awesome! 🚀</button>
               </div>
             </div>
@@ -199,12 +201,73 @@ function openRegistrationModal(opts) {
         alert('Please upload a screenshot first');
         return;
       }
-      // Show success
-      backdrop.querySelector('.step-3').classList.remove('active');
-      backdrop.querySelector('.step-4').classList.add('active');
-      backdrop.querySelector('.step-pane-3').style.display = 'none';
-      backdrop.querySelector('.step-pane-4').style.display = 'block';
-      backdrop.querySelector('#event-name').textContent = eventTitle || 'the event';
+      
+      // In a real implementation, you would upload the file to a server
+      // For this demo, we'll simulate a successful upload
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing...';
+      
+      // Simulate server processing
+      setTimeout(() => {
+        // Store registration data in localStorage for demo purposes
+        const form = backdrop.querySelector('#reg-form');
+        const name = form.querySelector('input[name="name"]').value.trim();
+        const roll = form.querySelector('input[name="roll"]').value.trim();
+        const branch = form.querySelector('input[name="branch"]').value.trim();
+        const paymentId = 'UPI' + Math.random().toString(36).substring(2, 10).toUpperCase();
+        
+        const registrationData = {
+          name,
+          roll,
+          branch,
+          event: eventTitle,
+          amount: eventAmount || '₹100',
+          paymentId: paymentId,
+          timestamp: new Date().toISOString(),
+          status: 'confirmed'
+        };
+        
+        // Store in localStorage (in a real app, this would be sent to a server)
+        const registrations = JSON.parse(localStorage.getItem('registrations') || '[]');
+        registrations.push(registrationData);
+        localStorage.setItem('registrations', JSON.stringify(registrations));
+        
+        // Show success step
+        backdrop.querySelector('.step-3').classList.remove('active');
+        backdrop.querySelector('.step-4').classList.add('active');
+        backdrop.querySelector('.step-pane-3').style.display = 'none';
+        backdrop.querySelector('.step-pane-4').style.display = 'block';
+        
+        // Set event name and payment details in success message
+        const eventNameEl = backdrop.querySelector('#event-name');
+        if (eventNameEl) eventNameEl.textContent = eventTitle || 'the event';
+        
+        // Add payment confirmation details to success message
+        const successMsg = backdrop.querySelector('.step-pane-4 .content');
+        if (successMsg) {
+          const paymentDetails = document.createElement('div');
+          paymentDetails.className = 'payment-confirmation';
+          paymentDetails.innerHTML = `
+            <p><strong>Payment Details:</strong></p>
+            <p>Amount: ${eventAmount || '₹100'}</p>
+            <p>Transaction ID: ${paymentId}</p>
+            <p>Date: ${new Date().toLocaleDateString()}</p>
+          `;
+          successMsg.appendChild(paymentDetails);
+        }
+        
+        // Enable download receipt button
+        const downloadBtn = backdrop.querySelector('#download-receipt');
+        if (downloadBtn) {
+          downloadBtn.style.display = 'inline-block';
+          downloadBtn.addEventListener('click', function() {
+            generateReceipt(registrationData);
+          });
+        }
+        
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Done';
+      }, 1500);
     });
   }
   backdrop.querySelector('#reg-title').textContent = `${eventTitle || 'Registration'}`;
@@ -255,6 +318,97 @@ document.addEventListener('click', function (e) {
     }
   });
 })();
+
+// Generate PDF receipt for registration
+function generateReceipt(registrationData) {
+  // Create a receipt content string with HTML formatting
+  const receiptContent = `
+    <html>
+    <head>
+      <title>Registration Receipt - CoSmoG</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .receipt { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+        .title { font-size: 18px; margin-bottom: 20px; }
+        .details { margin-bottom: 20px; }
+        .details table { width: 100%; border-collapse: collapse; }
+        .details td { padding: 8px; border-bottom: 1px solid #eee; }
+        .details td:first-child { font-weight: bold; width: 40%; }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; }
+      </style>
+    </head>
+    <body>
+      <div class="receipt">
+        <div class="header">
+          <div class="logo">CoSmoG</div>
+          <div class="title">Registration Receipt</div>
+        </div>
+        <div class="details">
+          <table>
+            <tr>
+              <td>Event</td>
+              <td>${registrationData.event || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>${registrationData.name || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td>Roll Number</td>
+              <td>${registrationData.roll || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td>Branch</td>
+              <td>${registrationData.branch || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td>Amount Paid</td>
+              <td>${registrationData.amount || '₹0'}</td>
+            </tr>
+            <tr>
+              <td>Transaction ID</td>
+              <td>${registrationData.paymentId || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td>Date & Time</td>
+              <td>${new Date(registrationData.timestamp).toLocaleString()}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>${registrationData.status === 'confirmed' ? 'Confirmed ✓' : registrationData.status}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="footer">
+          <p>This is an electronic receipt for your registration. Please bring this receipt or your registration ID to the event.</p>
+          <p>For any queries, contact us at: support@cosmog.edu</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  // Create a Blob from the HTML content
+  const blob = new Blob([receiptContent], { type: 'text/html' });
+  
+  // Create a URL for the Blob
+  const url = URL.createObjectURL(blob);
+  
+  // Create a temporary link element
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `CoSmoG_Receipt_${registrationData.event.replace(/\s+/g, '_')}_${registrationData.name.replace(/\s+/g, '_')}.html`;
+  
+  // Append to the document, click it, and remove it
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  // Release the URL object
+  setTimeout(() => URL.revokeObjectURL(url), 100);
+}
 
 // Register service worker for PWA
 if ('serviceWorker' in navigator) {

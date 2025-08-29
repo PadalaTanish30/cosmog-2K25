@@ -4,9 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CoSmoG • Schedule</title>
-  <meta name="description" content="Agenda and session details for CoSmoG at SMEC.">
+  <meta name="description" content="Complete event schedule for CoSmoG at SMEC. Find times, locations, and details for all workshops, talks, and competitions.">
+  <meta name="keywords" content="CoSmoG schedule, event timetable, tech fest schedule, workshop timings, competition schedule">
+  <meta name="author" content="CoSmoG Team">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cosmog.edu/schedule.html">
+  <meta property="og:title" content="CoSmoG • Event Schedule">
+  <meta property="og:description" content="Complete event schedule for CoSmoG at SMEC. Find times, locations, and details for all workshops, talks, and competitions.">
+  <meta property="og:image" content="assets/img/IMG-20250821-WA0020.jpg">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://cosmog.edu/schedule.html">
+  
   <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="assets/css/image-optimizations.css">
+  <link rel="stylesheet" href="assets/css/webp-fallback.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="canonical" href="https://cosmog.edu/schedule.html">
+  <script src="assets/js/image-loader.js" defer></script>
+  <script src="assets/js/responsive-images.js" defer></script>
+  <script src="assets/js/sw-register.js" defer></script>
+  <script src="assets/js/analytics.js" defer></script>
+  <meta property="twitter:title" content="CoSmoG • Event Schedule">
+  <meta property="twitter:description" content="Complete event schedule for CoSmoG at SMEC. Find times, locations, and details for all workshops, talks, and competitions.">
+  <meta property="twitter:image" content="assets/img/IMG-20250821-WA0020.jpg">
+  
+  <!-- Duplicate links removed -->
 </head>
 <body>
   <header class="navbar">
@@ -17,13 +44,13 @@
       </a>
       <nav>
         <div class="row">
-          <button class="btn menu-btn" data-menu>Menu</button>
+          <button class="btn menu-btn" data-menu><i class="fas fa-bars"></i> Menu</button>
         </div>
         <div class="nav-links">
-          <a href="index.html">Home</a>
-          <a class="active" href="schedule.html">Schedule</a>
-          <a href="events.html">Events</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html"><i class="fas fa-home"></i> Home</a>
+          <a class="active" href="schedule.html"><i class="fas fa-calendar-alt"></i> Schedule</a>
+          <a href="events.html"><i class="fas fa-ticket-alt"></i> Events</a>
+          <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
         </div>
       </nav>
     </div>
@@ -32,9 +59,9 @@
   <main>
     <section class="hero">
       <div class="container">
-        <span class="badge alt">Two Days • 15–16 Sep 2025</span>
-        <h1>Event Schedule</h1>
-        <p>Plan your days. Filter by track to see what matters most to you.</p>
+        <span class="badge alt"><i class="far fa-calendar-alt"></i> Two Days • 15–16 Sep 2025</span>
+        <h1><i class="fas fa-calendar-check"></i> Event Schedule</h1>
+        <p><i class="fas fa-filter"></i> Plan your days. Filter by track to see what matters most to you.</p>
       </div>
     </section>
 
@@ -43,7 +70,7 @@
         <div class="panel card">
           <div class="row" style="justify-content: space-between;">
             <div class="row">
-              <label for="track">Track</label>
+              <label for="track"><i class="fas fa-tag"></i> Track</label>
               <select id="track" onchange="document.querySelectorAll('[data-track]').forEach(e=>{e.style.display=(this.value==='all'||e.dataset.track===this.value)?'table-row':'none';})">
                 <option value="all">All</option>
                 <option value="workshop">Workshop</option>
@@ -51,16 +78,16 @@
                 <option value="competition">Competition</option>
               </select>
             </div>
-            <div class="note">Venues: MG Auditorium • SCB - Sardar Vallabhbhai Patel Auditorium • APJ Abdul Kalam Auditorium</div>
+            <div class="note"><i class="fas fa-map-marker-alt"></i> Venues: MG Auditorium • SCB - Sardar Vallabhbhai Patel Auditorium • APJ Abdul Kalam Auditorium</div>
           </div>
           <div class="space"></div>
           <table>
             <thead>
               <tr>
-                <th>Time</th>
-                <th>Session</th>
-                <th>Track</th>
-                <th>Location</th>
+                <th><i class="far fa-clock"></i> Time</th>
+                <th><i class="fas fa-chalkboard-teacher"></i> Session</th>
+                <th><i class="fas fa-tag"></i> Track</th>
+                <th><i class="fas fa-map-marker-alt"></i> Location</th>
               </tr>
             </thead>
             <tbody>
@@ -79,15 +106,16 @@
 
   <footer>
     <div class="container footer-wrap">
-      <div>© 2025 CoSmoG • Schedule</div>
+      <div><i class="far fa-copyright"></i> 2025 CoSmoG • Schedule</div>
       <div class="footer-links">
-        <a href="contact.html">Support</a>
-        <a href="code-of-conduct.html">Code of Conduct</a>
+        <a href="contact.html"><i class="fas fa-headset"></i> Support</a>
+        <a href="code-of-conduct.html"><i class="fas fa-gavel"></i> Code of Conduct</a>
       </div>
     </div>
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/sw-register.js"></script>
 </body>
 </html>
 

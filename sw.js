@@ -1,13 +1,21 @@
 const CACHE = 'cosmog-v1';
 const ASSETS = [
   '/',
-  '/cosmog-2K25/',
-  '/cosmog-2K25/index.html',
-  '/cosmog-2K25/assets/css/styles.css',
-  '/cosmog-2K25/assets/js/main.js',
-  '/cosmog-2K25/events.html',
-  '/cosmog-2K25/schedule.html',
-  '/cosmog-2K25/contact.html'
+  '/index.html',
+  '/assets/css/styles.css',
+  '/assets/css/webp-fallback.css',
+  '/assets/css/image-optimizations.css',
+  '/assets/js/main.js',
+  '/assets/js/sw-register.js',
+  '/assets/js/image-loader.js',
+  '/assets/js/responsive-images.js',
+  '/events.html',
+  '/schedule.html',
+  '/contact.html',
+  '/code-of-conduct.html',
+  '/form-success.html',
+  '/assets/img/favicon.ico',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'
 ];
 
 self.addEventListener('install', (e) => {
