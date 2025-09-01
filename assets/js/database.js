@@ -3,6 +3,23 @@
  * Uses SQL.js (SQLite compiled to JavaScript) for client-side database
  */
 
+e // Helper to ensure SQL.js is available
+const SQL_LOADER = { promise: null };
+async function ensureSqlJs() {
+  if (typeof initSqlJs === 'function') return;
+  if (!SQL_LOADER.promise) {
+    SQL_LOADER.promise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js';
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = (e) => reject(e);
+      document.head.appendChild(s);
+    });
+  }
+  await SQL_LOADER.promise;
+}
+
 // Database initialization and management
 const DB = {
   db: null,
@@ -13,7 +30,8 @@ const DB = {
     if (this.initialized) return Promise.resolve(this.db);
     
     try {
-      // Load SQL.js from CDN
+      // Load SQL.js from CDN (ensure available)
+      await ensureSqlJs();
       const sqlPromise = initSqlJs({
         locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
       });
@@ -89,10 +107,13 @@ const DB = {
   // Save the database to localStorage
   save() {
     if (!this.db) return;
-    
-    const data = this.db.export();
-    const arr = Array.from(data);
-    localStorage.setItem('cosmog_db', JSON.stringify(arr));
+    try {
+      const data = this.db.export();
+      const arr = Array.from(data);
+      localStorage.setItem('cosmog_db', JSON.stringify(arr));
+    } catch (e) {
+      console.warn('DB save skipped:', e);
+    }
   },
   
   // Execute a query and return results
@@ -121,41 +142,36 @@ const DB = {
     }
   },
   
-  // Get a single row
+  // Get a single row (prepared statement)
   getOne(sql, params = []) {
     if (!this.db) return null;
-    
     try {
-      const result = this.db.exec(sql, params);
-      if (result.length === 0 || result[0].values.length === 0) return null;
-      
-      const row = {};
-      result[0].columns.forEach((col, i) => {
-        row[col] = result[0].values[0][i];
-      });
-      
+      const stmt = this.db.prepare(sql);
+      if (params && params.length) stmt.bind(params);
+      let row = null;
+      if (stmt.step()) {
+        row = stmt.getAsObject();
+      }
+      stmt.free();
       return row;
     } catch (err) {
       console.error('SQL getOne error:', err, sql, params);
       return null;
     }
   },
-  
-  // Get multiple rows
+
+  // Get multiple rows (prepared statement)
   getAll(sql, params = []) {
     if (!this.db) return [];
-    
     try {
-      const result = this.db.exec(sql, params);
-      if (result.length === 0) return [];
-      
-      return result[0].values.map(rowData => {
-        const row = {};
-        result[0].columns.forEach((col, i) => {
-          row[col] = rowData[i];
-        });
-        return row;
-      });
+      const stmt = this.db.prepare(sql);
+      if (params && params.length) stmt.bind(params);
+      const rows = [];
+      while (stmt.step()) {
+        rows.push(stmt.getAsObject());
+      }
+      stmt.free();
+      return rows;
     } catch (err) {
       console.error('SQL getAll error:', err, sql, params);
       return [];
@@ -203,7 +219,13 @@ const Events = {
   
   // Get event by title
   getByTitle(title) {
-    return DB.getOne('SELECT * FROM events WHERE title = ?', [title]);
+    return DB.getOne('SELECT * FROM events WHERE title = ?', [String(title || '').trim()]);
+  },
+
+  // Create event if missing
+  create({ title, description, amount }) {
+    const ok = DB.run('INSERT INTO events (title, description, amount) VALUES (?, ?, ?)', [String(title || '').trim(), description || null, Number(amount) || 0]);
+    return ok;
   }
 };
 
@@ -243,7 +265,13 @@ const Registrations = {
     let eventId = registrationData.event_id;
     
     if (!eventId && registrationData.event_title) {
-      const event = await Events.getByTitle(registrationData.event_title);
+      const eventTitle = String(registrationData.event_title || '').trim();
+      let event = await Events.getByTitle(eventTitle);
+      if (!event) {
+        // Create a fallback event record if not present
+        Events.create({ title: eventTitle, description: null, amount: registrationData.amount || 0 });
+        event = await Events.getByTitle(eventTitle);
+      }
       if (event) eventId = event.id;
     }
     
@@ -288,6 +316,7 @@ const Registrations = {
   
   // Get recent registrations for the activity feed
   getRecent(limit = 10) {
+    const lim = Math.max(1, Number(limit) || 10);
     return DB.getAll(`
       SELECT r.id, r.created_at, r.status, u.name, u.roll_no, u.branch, e.title as event_title
       FROM registrations r
@@ -295,8 +324,8 @@ const Registrations = {
       JOIN events e ON r.event_id = e.id
       WHERE r.status = 'confirmed'
       ORDER BY r.created_at DESC
-      LIMIT ?
-    `, [limit]);
+      LIMIT ${lim}
+    `);
   },
   
   // Get registrations by user ID
