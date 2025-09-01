@@ -44,5 +44,4 @@
     });
   });
 
-  console.log('Google Analytics initialized');
-})();
+  })();

@@ -141,15 +141,14 @@ function openRegistrationModal(opts) {
           </div>
           <div class="step-pane step-pane-4" style="display:none;">
             <div class="success-box">
-              <div style="font-size: 48px; margin-bottom: 16px;">⭐</div>
-              <h3>Hey STAR! 🌟</h3>
+                            <h3>Registration Confirmed</h3>
               <p>Thank you for registering for <strong id="event-name"></strong>!</p>
               <p>We're excited to see you at CoSmoG. Your registration has been confirmed.</p>
               <div class="content"><!-- Payment details will be inserted here --></div>
               <div class="note">Check your email for further details. See you at the event!</div>
               <div class="actions">
                 <button class="btn" id="download-receipt" style="display:none;">Download Receipt</button>
-                <button class="btn primary" data-modal-close>Awesome! 🚀</button>
+                <button class="btn primary" data-modal-close>Close</button>
               </div>
             </div>
           </div>
@@ -713,10 +712,4 @@ function generateReceipt(registrationData) {
   setTimeout(() => URL.revokeObjectURL(url), 100);
 }
 
-// Register service worker for PWA
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
-}
 

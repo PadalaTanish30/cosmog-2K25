@@ -254,8 +254,7 @@ const Registrations = {
     if (!transactionId || transactionId.trim() === '') {
       // Generate a fallback transaction ID if none provided
       transactionId = 'UPI' + Math.random().toString(36).substring(2, 10).toUpperCase();
-      console.warn('No transaction ID provided, generated fallback:', transactionId);
-    }
+          }
     
     // Create registration
     return DB.run(

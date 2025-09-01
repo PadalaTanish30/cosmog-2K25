@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       // Initialize the database
       await window.CosmogDB.init();
-      console.log('Database initialized successfully');
       
       // Migrate data from localStorage if needed
       migrateFromLocalStorage();
@@ -42,7 +41,7 @@ async function migrateFromLocalStorage() {
     const registrations = JSON.parse(oldRegistrations);
     if (!Array.isArray(registrations) || registrations.length === 0) return;
     
-    console.log(`Migrating ${registrations.length} registrations from localStorage`);
+    // Migrating existing registrations from localStorage
     
     // Process each registration
     for (const reg of registrations) {
@@ -60,7 +59,7 @@ async function migrateFromLocalStorage() {
     
     // Clear old storage after successful migration
     localStorage.removeItem('registrations');
-    console.log('Migration completed successfully');
+    // Migration completed
   } catch (err) {
     console.error('Migration failed:', err);
   }

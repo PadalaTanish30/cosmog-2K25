@@ -683,7 +683,7 @@ function playStarSound() {
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + 0.3);
   } catch (e) {
-    console.log('Audio not supported');
+    // Audio not supported
   }
 }
 
