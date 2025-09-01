@@ -22,9 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
       // Migrate data from localStorage if needed
       migrateFromLocalStorage();
       
-      // Initialize activity feed if on homepage
+      // Initialize activity feed if present
       if (document.querySelector('.activity-feed')) {
         updateActivityFeed();
+      }
+      // Initialize live ticker if present
+      if (document.getElementById('ticker-content')) {
+        updateTicker();
       }
     } catch (err) {
       console.error('Failed to initialize database:', err);
@@ -121,6 +125,29 @@ async function updateActivityFeed() {
   }
 }
 
+// Update the live registrations ticker
+async function updateTicker() {
+  const el = document.getElementById('ticker-content');
+  if (!el || !window.CosmogDB?.Registrations?.getRecent) return;
+  try {
+    const recents = await window.CosmogDB.Registrations.getRecent(10);
+    if (!recents || recents.length === 0) {
+      el.innerHTML = '<span class="ticker-item">No registrations yet. Be the first to register!</span>';
+      return;
+    }
+    const items = recents.map(r => {
+      const name = String(r.name || '').split(' ')[0];
+      const branch = r.branch || '';
+      const event = r.event_title || 'Event';
+      return `<span class="ticker-item">${name} (${branch}) registered for ${event}</span>`;
+    }).join('<span class="ticker-sep"> • </span>');
+    // Duplicate content for seamless loop
+    el.innerHTML = items + '<span class="ticker-sep"> • </span>' + items;
+  } catch (e) {
+    console.error('Failed to update ticker', e);
+  }
+}
+
 // Helper function to format time ago
 function getTimeAgo(date) {
   const seconds = Math.floor((new Date() - date) / 1000);
@@ -145,7 +172,6 @@ function getTimeAgo(date) {
 
 // Set up periodic refresh of the activity feed
 setInterval(() => {
-  if (document.querySelector('.activity-feed')) {
-    updateActivityFeed();
-  }
+  if (document.querySelector('.activity-feed')) updateActivityFeed();
+  if (document.getElementById('ticker-content')) updateTicker();
 }, 60000); // Update every minute

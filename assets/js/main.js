@@ -176,8 +176,8 @@ function openRegistrationModal(opts) {
         return;
       }
 
-      // Block zero amount when an amount is expected
-      if ((amount || metaAmount) && (!amtNum || Number(amtNum) <= 0)) {
+      // Allow zero-amount (free) registrations; only block negative/invalid
+      if ((amount || metaAmount) && (!amtNum || Number(amtNum) < 0)) {
         alert('Payment amount is not set. Please try again later.');
         return;
       }
