@@ -1,5 +1,6 @@
 /**
  * Enhanced form validation with error handling
+ * Includes validation for transaction IDs
  */
 
 // Form validation with error messages displayed inline
@@ -51,6 +52,56 @@ function validateForm() {
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+}
+
+// Helper function to validate transaction ID format
+function isValidTransactionID(transactionID) {
+  // Transaction ID validation rules:
+  // 1. Must be at least 8 characters long
+  // 2. Can contain alphanumeric characters, hyphens, and underscores
+  // 3. Common UPI transaction ID formats (varies by provider)
+  
+  if (!transactionID || transactionID.trim().length < 8) {
+    return false;
+  }
+  
+  // Basic format validation (alphanumeric with some special chars)
+  const basicFormatRegex = /^[a-zA-Z0-9_\-\.]{8,}$/;
+  if (basicFormatRegex.test(transactionID)) {
+    return true;
+  }
+  
+  // Check for common UPI transaction ID patterns
+  // Examples: 
+  // - Google Pay: UPI123456789
+  // - PhonePe: T2207271234567890123456
+  // - Paytm: 20220727111212800110168887601485862
+  const upiPatterns = [
+    /^UPI\d{9,}$/,                         // Google Pay pattern
+    /^T\d{22,}$/,                          // PhonePe pattern
+    /^\d{14,}$/,                           // BHIM UPI pattern
+    /^\d{30,}$/,                           // Paytm pattern
+    /^[A-Z0-9]{18}$/                       // SBI UPI pattern
+  ];
+  
+  return upiPatterns.some(pattern => pattern.test(transactionID));
+}
+
+// Function to validate transaction ID with custom rules
+function validateTransactionID(transactionID) {
+  if (!transactionID || transactionID.trim() === '') {
+    return { isValid: false, message: 'Please enter your transaction ID' };
+  }
+  
+  if (transactionID.trim().length < 8) {
+    return { isValid: false, message: 'Transaction ID must be at least 8 characters' };
+  }
+  
+  if (!isValidTransactionID(transactionID)) {
+    return { isValid: false, message: 'Please enter a valid transaction ID format' };
+  }
+  
+  return { isValid: true, message: '' };
 }
 
 // Display error message below the input field

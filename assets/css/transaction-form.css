@@ -1,0 +1,68 @@
+/**
+ * Transaction form styles for CoSmoG website
+ */
+
+.transaction-id-input {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: var(--color-panel-light);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.transaction-id-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+.transaction-id-input input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.transaction-id-input input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.transaction-id-input .hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Easter egg animation when transaction ID is entered */
+@keyframes pulse-success {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.transaction-id-input.valid {
+  border-color: var(--color-success);
+  animation: pulse-success 0.5s ease-in-out;
+}
+
+/* Add validation styling */
+.transaction-id-input input.valid {
+  border-color: var(--color-success);
+  background-color: rgba(var(--color-success-rgb), 0.05);
+}
+
+.transaction-id-input input.invalid {
+  border-color: var(--color-error);
+  background-color: rgba(var(--color-error-rgb), 0.05);
+}
+
+.transaction-id-input .error-message {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
