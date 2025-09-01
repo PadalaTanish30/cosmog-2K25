@@ -159,7 +159,7 @@ function openRegistrationModal(opts) {
       if (ev.target === backdrop) closeRegistrationModal();
     });
     const nextBtn = backdrop.querySelector('#reg-next');
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener('click', async () => {
       const form = backdrop.querySelector('#reg-form');
       if (!form.reportValidity()) return;
       // Build UPI URL
@@ -170,13 +170,79 @@ function openRegistrationModal(opts) {
       const roll = form.querySelector('input[name="roll"]').value.trim();
       const branch = form.querySelector('input[name="branch"]').value.trim();
 
-      // Validate UPI configuration
+      const isPaid = Number(amtNum) > 0;
+
+      // Free event flow: skip UPI and upload, auto-confirm
+      if (!isPaid) {
+        (async () => {
+          try {
+            if (window.CosmogDB?.init) { await window.CosmogDB.init(); }
+            const email = form.querySelector('input[name="email"]')?.value.trim() || null;
+            const transactionId = 'FREE' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+            const created = await window.CosmogDB.Registrations.create({
+              name,
+              roll_no: roll,
+              branch,
+              email,
+              event_title: eventTitle,
+              amount: 0,
+              transaction_id: transactionId,
+              payment_screenshot: null,
+              status: 'confirmed'
+            });
+
+            if (!created) throw new Error('Failed to save registration');
+
+            if (typeof updateActivityFeed === 'function') { updateActivityFeed(); }
+            if (typeof updateTicker === 'function') { updateTicker(); }
+
+            // Go directly to success step
+            backdrop.querySelector('.step-1').classList.remove('active');
+            backdrop.querySelector('.step-4').classList.add('active');
+            const pane1x = backdrop.querySelector('.step-pane-1');
+            const pane4x = backdrop.querySelector('.step-pane-4');
+            if (pane1x) { pane1x.style.display = 'none'; pane1x.setAttribute('aria-hidden', 'true'); }
+            if (pane4x) { pane4x.style.display = 'block'; pane4x.setAttribute('aria-hidden', 'false'); const first = pane4x.querySelector('input, button, a'); if (first) first.focus(); }
+            const step1x = backdrop.querySelector('.step-1');
+            const step4x = backdrop.querySelector('.step-4');
+            if (step1x) step1x.setAttribute('aria-current', 'false');
+            if (step4x) step4x.setAttribute('aria-current', 'step');
+
+            const eventNameEl = backdrop.querySelector('#event-name');
+            if (eventNameEl) eventNameEl.textContent = eventTitle || 'the event';
+
+            const successMsg = backdrop.querySelector('.step-pane-4 .content');
+            if (successMsg) {
+              successMsg.textContent = '';
+              const details = document.createElement('div');
+              details.className = 'payment-confirmation';
+              const titleP = document.createElement('p'); titleP.innerHTML = '<strong>Registration Details:</strong>';
+              const amountP = document.createElement('p'); amountP.textContent = 'Amount: ₹0';
+              const txP = document.createElement('p'); txP.textContent = `Registration ID: ${transactionId}`;
+              const dateP = document.createElement('p'); dateP.textContent = `Date: ${new Date().toLocaleDateString()}`;
+              details.append(titleP, amountP, txP, dateP);
+              successMsg.appendChild(details);
+
+              const downloadBtn = backdrop.querySelector('#download-receipt');
+              if (downloadBtn) {
+                downloadBtn.style.display = 'inline-block';
+                downloadBtn.onclick = () => generateReceipt({ event: eventTitle, name, roll, branch, amount: '₹0', paymentId: transactionId, timestamp: new Date().toISOString(), status: 'confirmed' });
+              }
+            }
+          } catch (err) {
+            console.error('Free registration failed', err);
+            alert(err && err.message ? err.message : 'Registration failed. Please try again.');
+          }
+        })();
+        return;
+      }
+
+      // Paid flow validations
       if (!upiId || upiId.includes('not-set') || !/.+@.+/.test(upiId)) {
         alert('Payment is not configured. Please contact support.');
         return;
       }
-
-      // Allow zero-amount (free) registrations; only block negative/invalid
       if ((amount || metaAmount) && (!amtNum || Number(amtNum) < 0)) {
         alert('Payment amount is not set. Please try again later.');
         return;
@@ -383,6 +449,8 @@ function openRegistrationModal(opts) {
       // Process the registration with our database
       setTimeout(async () => {
         try {
+          // Ensure DB is initialized
+          if (window.CosmogDB?.init) { await window.CosmogDB.init(); }
           // Get form data
           const form = backdrop.querySelector('#reg-form');
           const name = form.querySelector('input[name="name"]').value.trim();
